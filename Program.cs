@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -149,6 +150,30 @@ namespace console_todo_list
                         Console.ResetColor();
                     }
                 }
+            }
+
+            static void SaveTasks(List<Task> tasks, string filename)
+            {
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(filename))
+                    {
+                        foreach (var task in tasks)
+                        {
+                            writer.WriteLine($"{task.Name},{task.Completed}");
+                        }
+                    }
+                    Console.WriteLine("Task saved.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error saving tasks: {ex:Message}");
+                }
+            }
+
+            static void LoadTasks (List<Task> tasks, string filename)
+            {
+
             }
         }       
 
