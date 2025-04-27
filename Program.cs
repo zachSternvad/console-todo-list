@@ -44,7 +44,7 @@ namespace console_todo_list
                     Console.WriteLine("4. Save Tasks to file");
                     Console.WriteLine("5. Load Tasks from file");
                     Console.WriteLine("6. Remove a task");
-                    Console.WriteLine("7. Exit the apllication");
+                    Console.WriteLine("7. Exit the aplication");
 
                     Console.Write("\nEnter your choice: ");
                     string choice = Console.ReadLine();
@@ -60,10 +60,10 @@ namespace console_todo_list
                             MarkTaskCompleted(tasks);
                             break;
                         case "3":
-                            ViewTasks(tasks); 
+                            ViewTasks(tasks);
                             break;
                         case "4":
-                            SaveTasks(tasks, filename); 
+                            SaveTasks(tasks, filename);
                             break;
                         case "5":
                             LoadTasks(tasks, filename);
@@ -140,13 +140,13 @@ namespace console_todo_list
                     if (task.Completed)
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Completed");
+                        Console.WriteLine("\t\tCompleted");
                         Console.ResetColor();
                     }
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine("Pending..");
+                        Console.WriteLine("\t\tPending..");
                         Console.ResetColor();
                     }
                 }
@@ -171,11 +171,63 @@ namespace console_todo_list
                 }
             }
 
-            static void LoadTasks (List<Task> tasks, string filename)
+            static void LoadTasks(List<Task> tasks, string filename)
             {
-
+                tasks.Clear();
+                try
+                {
+                    if (File.Exists(filename))
+                    {
+                        using (StreamReader reader = new StreamReader(filename))
+                        {
+                            string line;
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                string[] parts = line.Split(',');
+                                if (parts.Length == 2)
+                                {
+                                    tasks.Add(new Task(parts[0]) { Completed = bool.Parse(parts[1]) });
+                                }
+                            }
+                        }
+                        Console.WriteLine("Tasks loaded.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No saved tasks found.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error loading tasks: {ex.Message}");
+                }
             }
-        }       
 
+            static void RemoveTask(List<Task> tasks)
+            {
+                if (tasks.Count == 0)
+                {
+                    Console.WriteLine("No tasks available to remove.");
+                    return;
+                }
+
+                for (int i = 0; i < tasks.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {tasks[i].Name} - Completed: {tasks[i].Completed}");
+                }
+
+                Console.Write("Enter the task number to remove: ");
+                if (int.TryParse(Console.ReadLine(), out int taskNumber) && taskNumber > 0 && taskNumber <= tasks.Count)
+                {
+                    tasks.RemoveAt(taskNumber - 1);
+                    Console.WriteLine("Task removed.");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid task number.");
+                }
+            }
+        }
     }
 }
+
