@@ -86,6 +86,69 @@ namespace console_todo_list
             {
                 Console.Write("Enter task name: ");
                 string name = Console.ReadLine();
+
+                tasks.Add(new Task(name));
+                Console.WriteLine("Task added.");
+            }
+
+            static void MarkTaskCompleted(List<Task> tasks)
+            {
+                if (tasks.Count == 0)
+                {
+                    Console.WriteLine("No tasks available.");
+                    return;
+                }
+
+                for (int i = 0; i < tasks.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {tasks[i]}");
+                }
+
+                Console.Write("Enter task number to mark as completed: ");
+                if (int.TryParse(Console.ReadLine(), out int taskNumber) && taskNumber > 0 && taskNumber <= tasks.Count)
+                {
+                    tasks[taskNumber - 1].Completed = true;
+                    Console.WriteLine("Task marked as completed.");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid task number.");
+                }
+            }
+
+            static void ViewTasks(List<Task> tasks)
+            {
+                if (tasks.Count == 0)
+                {
+                    Console.WriteLine("No tasks available.");
+                    return;
+                }
+
+                var sortedTasks = tasks
+                    .OrderBy(task => task.Completed)
+                    .ToList();
+
+                Console.WriteLine($"{"Task Name",-20}{"Status"}");
+                Console.WriteLine("-----------------------------------------");
+
+
+                foreach (var task in sortedTasks)
+                {
+                    Console.Write($"{task.Name,-20}");
+
+                    if (task.Completed)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Completed");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("Pending..");
+                        Console.ResetColor();
+                    }
+                }
             }
         }       
 
