@@ -18,7 +18,7 @@ This repository contains the code for a console todo list / task tracker as part
 * Build a console app in C#
 * Save items to file and access them
 
-**How to Run (if applicable):**
+**How to Run:**
 
 * Clone repo and run locally
 
